@@ -9,6 +9,8 @@ CREATE TABLE Rol (
     CONSTRAINT chk_nombre_rol CHECK (nombre_rol IN ('Admin', 'Vendedor', 'Cliente'))
 );
 
+INSERT INTO Rol (nombre_rol) VALUES ('Admin'), ('Vendedor'), ('Cliente');
+
 -- 2. Tabla Usuario
 CREATE TABLE Usuario (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
@@ -24,10 +26,30 @@ CREATE TABLE Usuario (
     FOREIGN KEY (id_rol) REFERENCES Rol(id_rol)
 );
 
+INSERT INTO Usuario (nombre, apellido, dni, email, contraseña, telefono, direccion, id_rol, activo)
+VALUES 
+('Admin', 'Principal', '00000000', 'admin@joyeria.com', 'admin123', '999888777', 'Oficina Central', 1, 1);
+
+ALTER TABLE Usuario
+ALTER id_rol SET DEFAULT 3;
+
 -- 3. Tabla CategoriaProducto
 CREATE TABLE CategoriaProducto (
     id_categoria INT PRIMARY KEY AUTO_INCREMENT,
     nombre_categoria VARCHAR(100) NOT NULL
+);
+
+-- 5. Tabla Material
+CREATE TABLE Material (
+    id_material INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_material VARCHAR(100) NOT NULL
+);
+
+-- 7. Tabla Coleccion
+CREATE TABLE Coleccion (
+    id_coleccion INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_coleccion VARCHAR(100) NOT NULL,
+    descripcion TEXT
 );
 
 -- 4. Tabla Producto
@@ -44,12 +66,6 @@ CREATE TABLE Producto (
     CONSTRAINT chk_stock CHECK (stock >= 0)
 );
 
--- 5. Tabla Material
-CREATE TABLE Material (
-    id_material INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_material VARCHAR(100) NOT NULL
-);
-
 -- 6. Tabla Producto_Material (Tabla intermedia)
 CREATE TABLE Producto_Material (
     id_producto INT NOT NULL,
@@ -59,13 +75,6 @@ CREATE TABLE Producto_Material (
     FOREIGN KEY (id_material) REFERENCES Material(id_material) ON DELETE CASCADE
 );
 
--- 7. Tabla Coleccion
-CREATE TABLE Coleccion (
-    id_coleccion INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_coleccion VARCHAR(100) NOT NULL,
-    descripcion TEXT
-);
-
 -- 8. Tabla Producto_Coleccion (Tabla intermedia)
 CREATE TABLE Producto_Coleccion (
     id_producto INT NOT NULL,
@@ -73,6 +82,13 @@ CREATE TABLE Producto_Coleccion (
     PRIMARY KEY (id_producto, id_coleccion),
     FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE CASCADE,
     FOREIGN KEY (id_coleccion) REFERENCES Coleccion(id_coleccion) ON DELETE CASCADE
+);
+
+-- 11. Tabla EstadoPedido (Se crea antes de Pedido por la FK)
+CREATE TABLE EstadoPedido (
+    id_estado INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_estado VARCHAR(20) NOT NULL,
+    CONSTRAINT chk_nombre_estado CHECK (nombre_estado IN ('Pendiente', 'Procesando', 'Entregado', 'Cancelado'))
 );
 
 -- 9. Tabla Pedido
@@ -102,12 +118,7 @@ CREATE TABLE DetallePedido (
     CONSTRAINT chk_subtotal CHECK (subtotal >= 0)
 );
 
--- 11. Tabla EstadoPedido (Se crea antes de Pedido por la FK)
-CREATE TABLE EstadoPedido (
-    id_estado INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_estado VARCHAR(20) NOT NULL,
-    CONSTRAINT chk_nombre_estado CHECK (nombre_estado IN ('Pendiente', 'Procesando', 'Entregado', 'Cancelado'))
-);
+
 
 -- 12. Tabla Venta
 CREATE TABLE Venta (
@@ -145,3 +156,19 @@ CREATE TABLE Factura (
     fecha_emision DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_venta) REFERENCES Venta(id_venta) ON DELETE CASCADE
 );
+
+INSERT INTO CategoriaProducto (nombre_categoria)
+VALUES 
+('Anillos'),
+('Collares'),
+('Pulseras'),
+('Aretes'),
+('Relojes');
+
+INSERT INTO Producto (nombre_producto, descripcion, precio, stock, imagen_url, id_categoria)
+VALUES
+('Anillo Esmeralda Real', 'Anillo de plata con piedra esmeralda natural, diseño elegante y resistente al desgaste.', 250.00, 15, 'https://example.com/img/anillo_esmeralda.jpg', 1),
+('Collar Corazón Dorado', 'Collar bañado en oro de 18k con dije de corazón, ideal para regalos románticos.', 180.00, 20, 'https://example.com/img/collar_corazon.jpg', 2),
+('Pulsera de Perlas Blancas', 'Pulsera de perlas naturales con cierre magnético, elegante y clásica.', 120.00, 30, 'https://example.com/img/pulsera_perlas.jpg', 3),
+('Aretes Luna Plata', 'Aretes de plata con forma de luna creciente, perfectos para uso diario.', 95.00, 40, 'https://example.com/img/aretes_luna.jpg', 4),
+('Reloj Minimalista Acero', 'Reloj de pulsera unisex con correa de acero inoxidable y diseño minimalista.', 320.00, 10, 'https://example.com/img/reloj_acero.jpg', 5);

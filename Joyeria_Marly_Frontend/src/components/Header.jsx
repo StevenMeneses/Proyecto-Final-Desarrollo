@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
+import { AuthContext } from "../contexts/Auth.context";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setMenuOpen((v) => {
@@ -222,7 +224,7 @@ export default function Header() {
             <option>EUR</option>
           </select>
           <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-          <Link to="/login">
+          <Link to={isLoggedIn ? "/profile" : "/login"}>
             <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </Link>
           <Link to="/cart">

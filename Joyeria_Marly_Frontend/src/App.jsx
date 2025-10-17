@@ -10,6 +10,7 @@ import CollectionDetail from "./pages/CollectionDetail";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 import ConfirmNewPassword from "./pages/ConfirnNewPassword";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/complaints-book" element={<ComplaintsBook />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
         <Route path="/collection-detail" element={<CollectionDetail />} />

@@ -43,6 +43,10 @@ function AuthProviderWrapper(props) {
         setUser(response.user);
         setIsLoggedIn(true);
         localStorage.setItem("authToken", response.token);
+        
+        // Marcar que el usuario acaba de iniciar sesión para mostrar el banner
+        sessionStorage.setItem("justLoggedIn", "true");
+        
         return true;
       } else {
         return false;
@@ -63,17 +67,43 @@ function AuthProviderWrapper(props) {
     setUser(null);
     setIsLoggedIn(false);
     localStorage.removeItem("authToken");
+  };
+
+  const register = async (registerData) => {
+    setIsLoading(true);
+    try {
+      console.log('📝 Datos enviados al registro:', registerData);
+      const response = await authAPI.register(registerData);
+      console.log('📥 Respuesta del registro:', response);
+      
+      if (response.success) {
+        // El backend solo devuelve el usuario, no un token
+        // Después del registro, hacer login automático
+        sessionStorage.setItem("justLoggedIn", "true");
+        const loginSuccess = await login({ username: registerData.email, password: registerData.password });
+        return loginSuccess;
+      }
+      return false;
+    } catch (error) {
+      console.error("Register error:", error);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AuthContext.Provider
-  value={{
-    isLoading,
-    user,
-    token,
-    isLoggedIn,
-    login,
-    logout,
-  }}
+      value={{
+        isLoading,
+        user,
+        token,
+        isLoggedIn,
+        login,
+        logout,
+        register,
+        validateToken,
+      }}
     >
       {props.children}
     </AuthContext.Provider>
@@ -81,5 +111,3 @@ function AuthProviderWrapper(props) {
 }
 
 export { AuthProviderWrapper, AuthContext };
-
-};

@@ -7,12 +7,14 @@ import MarlyCollections from "../components/MarlyCollections";
 import ShopByLook from "../components/ShopByLook";
 import MeetTheMaker from "../components/MeetTheMaker";
 import ShopInPerson from "../components/ShopInPerson";
+import WelcomeBanner from "../components/WelcomeBanner";
 import heroImg from "../assets/hero.png";
 
 export default function CartPage() {
   return (
     <>
       <Header />
+      <WelcomeBanner />
 
       <Hero imagen={heroImg} texto={true} />
 

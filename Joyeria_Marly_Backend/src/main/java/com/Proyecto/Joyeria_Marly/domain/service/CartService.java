@@ -8,7 +8,6 @@ import com.Proyecto.Joyeria_Marly.domain.dto.Cart;
 import com.Proyecto.Joyeria_Marly.domain.dto.CartItem;
 import com.Proyecto.Joyeria_Marly.persistance.entity.*;
 import com.Proyecto.Joyeria_Marly.persistance.crud.*;
-import com.Proyecto.Joyeria_Marly.domain.service.ProductoEntityService;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -166,9 +165,6 @@ public class CartService {
     public Cart removeFromCart(Integer userId, Integer productId) {
         Usuarios usuario = usuariosRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-
-        Productos producto = productoEntityService.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
 
         EstadoPedidos estadoPendiente = estadoPedidosRepository.findByNombreEstado("Pendiente")
                 .orElseThrow(() -> new IllegalArgumentException("Estado 'Pendiente' no configurado"));

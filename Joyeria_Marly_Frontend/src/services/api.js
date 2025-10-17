@@ -1,6 +1,8 @@
 // src/services/api.js
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+
+console.log('🔧 API Base URL configurada:', API_BASE_URL);
 
 // Función genérica para hacer peticiones API
 async function apiCall(endpoint, options = {}) {
@@ -28,11 +30,15 @@ async function apiCall(endpoint, options = {}) {
     
     console.log(`📡 Respuesta recibida: ${response.status} ${response.statusText}`);
     
+    // Intentar leer el cuerpo de la respuesta incluso si hay error
+    const data = await response.json();
+    console.log('📦 Datos completos de la respuesta:', data);
+    
     if (!response.ok) {
-      throw new Error(`Error HTTP! estado: ${response.status}`);
+      console.error('❌ Error del servidor:', data);
+      throw new Error(data.message || `Error HTTP! estado: ${response.status}`);
     }
     
-    const data = await response.json();
     console.log('✅ Datos recibidos:', data);
     return data;
     
@@ -48,6 +54,13 @@ export const authAPI = {
     return apiCall('/auth/login', {
       method: 'POST',
       body: { email, password },
+    });
+  },
+
+  register: async (userData) => {
+    return apiCall('/users/register', {
+      method: 'POST',
+      body: userData,
     });
   },
 
