@@ -48,44 +48,44 @@ function TermsConditions() {
   return (
     <>
       <Header />
-      <h2 className='text-2xl xs:text-3xl font-bold mb-8 whitespace-nowrap text-center mt-15'>
+      <h2 className="text-2xl xs:text-3xl font-bold mb-8 whitespace-nowrap text-center mt-15">
         TERMS AND CONDITIONS
       </h2>
-      <div className='my-20 mx-auto w-[60%] mx-auto'>
+      <div className="my-20 mx-auto w-[60%] mx-auto">
         <p>
           The services and products offered by MARLY Jewelry are governed by the
           following general conditions. By making a purchase, reservation, or
           requesting a service, the client expressly accepts these terms.
         </p>
         <ConditionsComponet
-          titulo='A. Responsibility'
+          titulo="A. Responsibility"
           subtitulos={conditions[0]}
         />
         <ConditionsComponet
-          titulo='B. Purchases, Payments, and Prices'
+          titulo="B. Purchases, Payments, and Prices"
           subtitulos={conditions[1]}
         />
         <ConditionsComponet
-          titulo='C. Reservations and Custom Orders'
+          titulo="C. Reservations and Custom Orders"
           subtitulos={conditions[2]}
         />
         <ConditionsComponet
-          titulo='D. Deliveries and Shipping'
+          titulo="D. Deliveries and Shipping"
           subtitulos={conditions[3]}
         />
         <ConditionsComponet
-          titulo='E. Warranties, Exchanges, and Returns'
+          titulo="E. Warranties, Exchanges, and Returns"
           subtitulos={conditions[4]}
         />
         <ConditionsComponet
-          titulo='F. Jewelry Care'
+          titulo="F. Jewelry Care"
           subtitulos={conditions[5]}
         />
         <ConditionsComponet
-          titulo='G. Personal Data'
+          titulo="G. Personal Data"
           subtitulos={conditions[6]}
         />
-        <ConditionsComponet titulo='H. Claims' subtitulos={conditions[7]} />
+        <ConditionsComponet titulo="H. Claims" subtitulos={conditions[7]} />
       </div>
       <Footer />
     </>

@@ -4,11 +4,8 @@ export default function MeetTheMaker() {
   const videoId = "LEeoLGUXQ8Y";
 
   return (
-    <section className="px-6 py-12 flex flex-col items-center"> 
-      
-      <h2 className="text-3xl font-bold text-center mb-4">
-        Meet the Maker
-      </h2>
+    <section className="px-6 py-12 flex flex-col items-center">
+      <h2 className="text-3xl font-bold text-center mb-4">Meet the Maker</h2>
 
       <div
         className="

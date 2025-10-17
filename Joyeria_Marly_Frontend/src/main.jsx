@@ -1,19 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import './index.css'
+import App from './App.jsx'
 import { AuthProviderWrapper } from './contexts/Auth.context.jsx'
 import { CartProviderWrapper } from './contexts/Cart.context.jsx'
-import App from './App.jsx'
-import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AuthProviderWrapper>
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <AuthProviderWrapper>
+      <BrowserRouter>
         <CartProviderWrapper>
           <App />
         </CartProviderWrapper>
-      </AuthProviderWrapper>
-    </BrowserRouter>
-  </React.StrictMode>,
+      </BrowserRouter>
+    </AuthProviderWrapper>
+  </StrictMode>
 )

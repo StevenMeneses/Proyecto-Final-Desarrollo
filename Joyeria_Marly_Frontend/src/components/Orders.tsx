@@ -1,5 +1,16 @@
 import "./Orders.css";
 
+interface OrderCardProps {
+  status?: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  quantity?: number;
+  onAdd: () => void;
+  onDelete: () => void;
+}
+
 function OrderCard({
   status = "In progress",
   image,
@@ -9,7 +20,7 @@ function OrderCard({
   quantity = 1,
   onAdd,
   onDelete,
-}) {
+}: OrderCardProps) {
   const total = price * quantity;
 
   return (

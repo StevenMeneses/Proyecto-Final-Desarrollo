@@ -21,16 +21,16 @@ export default function RecoverPassword() {
   return (
     <>
       <Header />
-      <div className='login-container'>
-        <div className='login-box'>
-          <h2 className='login-title'>New Password</h2>
+      <div className="login-container">
+        <div className="login-box">
+          <h2 className="login-title">New Password</h2>
 
-          <form className='login-form' onSubmit={handleSubmit}>
-            <div className='form-group'>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group">
               <input
-                id='password'
-                type='password'
-                placeholder='New Password'
+                id="password"
+                type="password"
+                placeholder="New Password"
                 onChange={(e) => {
                   setNewPassword(e.target.value);
                 }}
@@ -38,11 +38,11 @@ export default function RecoverPassword() {
               />
             </div>
 
-            <div className='form-group'>
+            <div className="form-group">
               <input
-                id='id-password'
-                type='password'
-                placeholder='Confirm New Password'
+                id="id-password"
+                type="password"
+                placeholder="Confirm New Password"
                 onChange={(e) => {
                   setConfirmarNewPassword(e.target.value);
                 }}
@@ -50,14 +50,14 @@ export default function RecoverPassword() {
               />
             </div>
 
-            <button type='submit' className='login-btn'>
+            <button type="submit" className="login-btn">
               <Link to={"/login"}>UPDATE</Link>
             </button>
           </form>
 
-          <div className='login-links'>
-            <Link to='/register'>Create account</Link>
-            <Link to='/'>Return to Store</Link>
+          <div className="login-links">
+            <Link to="/register">Create account</Link>
+            <Link to="/">Return to Store</Link>
           </div>
         </div>
       </div>

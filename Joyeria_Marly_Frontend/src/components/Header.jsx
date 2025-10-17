@@ -1,16 +1,11 @@
-import { BrowserRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
-import { CartContext } from "../contexts/Cart.context";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
-  const { getCartItemCount } = useContext(CartContext);
-
-  const cartItemCount = getCartItemCount();
 
   const toggleMenu = () => {
     setMenuOpen((v) => {
@@ -26,7 +21,7 @@ export default function Header() {
   return (
     <header className="w-full border-b border-gray-200">
       <div className="flex items-center px-6 md:px-10 py-8">
-        {/* NAV DESKTOP - MANTENER EXACTAMENTE IGUAL */}
+        {/* NAV DESKTOP */}
         <nav className="hidden md:flex md:flex-1 justify-start">
           <ul className="flex items-center space-x-10 font-serif font-medium">
             <li className="relative group cursor-pointer">
@@ -201,7 +196,7 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* LOGO - MANTENER IGUAL */}
+        {/* LOGO */}
         <div className="flex justify-center items-center">
           <a href="/" className="flex items-center">
             <img
@@ -212,7 +207,7 @@ export default function Header() {
           </a>
         </div>
 
-        {/* ICONS + HAMBURGER - SOLO AGREGAR CONTADOR AL CARRITO */}
+        {/* ICONS + HAMBURGER */}
         <div className="flex flex-1 justify-end items-center space-x-4">
           <div className="relative inline-block">
             <select className="w-5 h-5 opacity-0 absolute inset-0 cursor-pointer">
@@ -230,13 +225,8 @@ export default function Header() {
           <Link to="/login">
             <User className="w-5 h-5 cursor-pointer text-[#040F2E]" />
           </Link>
-          <Link to="/cart" className="relative">
+          <Link to="/cart">
             <ShoppingCart className="w-5 h-5 cursor-pointer text-[#040F2E]" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                {cartItemCount}
-              </span>
-            )}
           </Link>
           <button
             className="md:hidden p-2 text-[#040F2E]"
@@ -252,7 +242,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* MOBILE MENU - MANTENER EXACTAMENTE IGUAL */}
+      {/* MOBILE MENU */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 font-serif">
           <div>

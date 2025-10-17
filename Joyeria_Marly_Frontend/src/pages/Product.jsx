@@ -6,37 +6,37 @@ import SelectAmount from "../components/Amount";
 import "../components/Product.css";
 
 export default function Product() {
-    return (
-        <>
-            <Header />
+  return (
+    <>
+      <Header />
 
-            <section>
-                <div className="Img-Product">
-                    <img src={ProductSelection} />
-                </div>
-                <div className="Content">
-                    <p>Home / SEA BREEZES</p>
-                    <br/>
-                    <h2>SEA BREEZES</h2>
+      <section>
+        <div className="Img-Product">
+          <img src={ProductSelection} />
+        </div>
+        <div className="Content">
+          <p>Home / SEA BREEZES</p>
+          <br />
+          <h2>SEA BREEZES</h2>
 
-                    <p>$21</p>
-                    <h2>Invisible Thread</h2>
+          <p>$21</p>
+          <h2>Invisible Thread</h2>
 
-                    <SelectAmount />
+          <SelectAmount />
 
-                    <button>ADD TO CART</button>
-                    <button>BUY NOW</button>
+          <button>ADD TO CART</button>
+          <button>BUY NOW</button>
 
-                    <p>Description</p>
-                    <p>Product Details</p>
-                    <p>Jewelry Care</p>
-                    <p>Shipping Info</p>
-                </div>
-            </section>
+          <p>Description</p>
+          <p>Product Details</p>
+          <p>Jewelry Care</p>
+          <p>Shipping Info</p>
+        </div>
+      </section>
 
-            <MostLoved />
+      <MostLoved />
 
-            <Footer />
-        </>
-    );
+      <Footer />
+    </>
+  );
 }

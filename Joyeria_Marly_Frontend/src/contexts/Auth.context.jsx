@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { createContext } from "react";
-import { authAPI } from "../services/api";
+import { useState, useEffect, createContext } from 'react'
+import { authAPI } from '../services/api'
 
 const AuthContext = createContext();
 
@@ -64,18 +63,17 @@ function AuthProviderWrapper(props) {
     setUser(null);
     setIsLoggedIn(false);
     localStorage.removeItem("authToken");
-  };
 
   return (
     <AuthContext.Provider
-      value={{
-        isLoading,
-        user,
-        token,
-        isLoggedIn,
-        login,
-        logout,
-      }}
+  value={{
+    isLoading,
+    user,
+    token,
+    isLoggedIn,
+    login,
+    logout,
+  }}
     >
       {props.children}
     </AuthContext.Provider>
@@ -83,3 +81,5 @@ function AuthProviderWrapper(props) {
 }
 
 export { AuthProviderWrapper, AuthContext };
+
+};

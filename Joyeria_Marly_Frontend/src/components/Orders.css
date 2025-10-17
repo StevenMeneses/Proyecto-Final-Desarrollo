@@ -97,7 +97,7 @@ article {
   font-size: 1rem;
   margin: 0;
   font-weight: 600;
-  color: #5A7690;
+  color: #5a7690;
 }
 
 .prices {
@@ -127,7 +127,7 @@ article {
 .prices h5 {
   margin: 0;
   font-size: 0.8rem;
-  color: #5A7690;
+  color: #5a7690;
   font-weight: 600;
 }
 
@@ -151,8 +151,8 @@ article {
 
 .btn-1 {
   background-color: #ffffff;
-  color: #5A6690;
-  border: 1px solid #5A6690;
+  color: #5a6690;
+  border: 1px solid #5a6690;
 }
 
 .btn-2 {
@@ -200,7 +200,6 @@ article {
     width: 100%;
   }
 }
-
 
 @media (max-width: 280px) {
   .product-group {

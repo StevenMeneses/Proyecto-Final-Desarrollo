@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { CartContext } from "../contexts/Cart.context";
 import { AuthContext } from "../contexts/Auth.context";
-
+ 
 export default function Cart() {
   const { 
     cart, 
@@ -19,13 +19,13 @@ export default function Cart() {
     console.log('Cambiando cantidad:', productId, newQuantity);
     
     if (newQuantity < 1) {
-      if (window.confirm('¿Quieres eliminar este producto del carrito?')) {
+      if (window.confirm('\u00bfQuieres eliminar este producto del carrito?')) {
         await removeFromCart(productId);
       }
       return;
     }
 
-    // Solo llamamos a updateCartItem, no necesitamos fetchCart aquí
+    // Solo llamamos a updateCartItem, no necesitamos fetchCart aqu\u00ed
     await updateCartItem(productId, newQuantity);
   };
 
@@ -34,7 +34,7 @@ export default function Cart() {
   };
 
   const handleClearCart = async () => {
-    if (window.confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+    if (window.confirm('\u00bfEst\u00e1s seguro de que quieres vaciar el carrito?')) {
       await clearCart();
     }
   };
@@ -45,10 +45,10 @@ export default function Cart() {
         <Header />
         <main className="bg-[#EBEBEB] min-h-screen overflow-auto flex justify-center items-center">
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Debes iniciar sesión</h2>
-            <p className="mb-4">Para ver tu carrito, necesitas iniciar sesión.</p>
+            <h2 className="text-2xl font-bold mb-4">Debes iniciar sesi\u00f3n</h2>
+            <p className="mb-4">Para ver tu carrito, necesitas iniciar sesi\u00f3n.</p>
             <a href="/login" className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-              Iniciar Sesión
+              Iniciar Sesi\u00f3n
             </a>
           </div>
         </main>
@@ -78,7 +78,7 @@ export default function Cart() {
           
           {!cart || cart.items.length === 0 ? (
             <div className="text-center py-12">
-              <h2 className="text-2xl font-semibold mb-4">Tu carrito está vacío</h2>
+              <h2 className="text-2xl font-semibold mb-4">Tu carrito est\u00e1 vac\u00edo</h2>
               <p className="text-gray-600 mb-6">Agrega algunos productos para comenzar a comprar</p>
               <a href="/" className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
                 Continuar Comprando
