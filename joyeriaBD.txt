@@ -1,0 +1,174 @@
+-- Crear la base de datos
+CREATE DATABASE joyeriaBD;
+USE joyeriaBD;
+
+-- 1. Tabla Rol
+CREATE TABLE Rol (
+    id_rol INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_rol VARCHAR(20) NOT NULL,
+    CONSTRAINT chk_nombre_rol CHECK (nombre_rol IN ('Admin', 'Vendedor', 'Cliente'))
+);
+
+INSERT INTO Rol (nombre_rol) VALUES ('Admin'), ('Vendedor'), ('Cliente');
+
+-- 2. Tabla Usuario
+CREATE TABLE Usuario (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    dni VARCHAR(8) UNIQUE NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    contraseña VARCHAR(255) NOT NULL,
+    telefono VARCHAR(15),
+    direccion VARCHAR(255),
+    id_rol INT NOT NULL,
+    activo TINYINT(1) DEFAULT 1,
+    FOREIGN KEY (id_rol) REFERENCES Rol(id_rol)
+);
+
+INSERT INTO Usuario (nombre, apellido, dni, email, contraseña, telefono, direccion, id_rol, activo)
+VALUES 
+('Admin', 'Principal', '00000000', 'admin@joyeria.com', 'admin123', '999888777', 'Oficina Central', 1, 1);
+
+ALTER TABLE Usuario
+ALTER id_rol SET DEFAULT 3;
+
+-- 3. Tabla CategoriaProducto
+CREATE TABLE CategoriaProducto (
+    id_categoria INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_categoria VARCHAR(100) NOT NULL
+);
+
+-- 5. Tabla Material
+CREATE TABLE Material (
+    id_material INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_material VARCHAR(100) NOT NULL
+);
+
+-- 7. Tabla Coleccion
+CREATE TABLE Coleccion (
+    id_coleccion INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_coleccion VARCHAR(100) NOT NULL,
+    descripcion TEXT
+);
+
+-- 4. Tabla Producto
+CREATE TABLE Producto (
+    id_producto INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_producto VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    imagen_url VARCHAR(255),
+    id_categoria INT NOT NULL,
+    FOREIGN KEY (id_categoria) REFERENCES CategoriaProducto(id_categoria),
+    CONSTRAINT chk_precio CHECK (precio >= 0),
+    CONSTRAINT chk_stock CHECK (stock >= 0)
+);
+
+-- 6. Tabla Producto_Material (Tabla intermedia)
+CREATE TABLE Producto_Material (
+    id_producto INT NOT NULL,
+    id_material INT NOT NULL,
+    PRIMARY KEY (id_producto, id_material),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_material) REFERENCES Material(id_material) ON DELETE CASCADE
+);
+
+-- 8. Tabla Producto_Coleccion (Tabla intermedia)
+CREATE TABLE Producto_Coleccion (
+    id_producto INT NOT NULL,
+    id_coleccion INT NOT NULL,
+    PRIMARY KEY (id_producto, id_coleccion),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE CASCADE,
+    FOREIGN KEY (id_coleccion) REFERENCES Coleccion(id_coleccion) ON DELETE CASCADE
+);
+
+-- 11. Tabla EstadoPedido (Se crea antes de Pedido por la FK)
+CREATE TABLE EstadoPedido (
+    id_estado INT PRIMARY KEY AUTO_INCREMENT,
+    nombre_estado VARCHAR(20) NOT NULL,
+    CONSTRAINT chk_nombre_estado CHECK (nombre_estado IN ('Pendiente', 'Procesando', 'Entregado', 'Cancelado'))
+);
+
+-- 9. Tabla Pedido
+CREATE TABLE Pedido (
+    id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario_cliente INT NOT NULL,
+    fecha_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    monto_total DECIMAL(10,2) NOT NULL,
+    id_estado INT NOT NULL,
+    FOREIGN KEY (id_usuario_cliente) REFERENCES Usuario(id_usuario),
+    FOREIGN KEY (id_estado) REFERENCES EstadoPedido(id_estado),
+    CONSTRAINT chk_monto_total CHECK (monto_total >= 0)
+);
+
+-- 10. Tabla DetallePedido
+CREATE TABLE DetallePedido (
+    id_detalle_pedido INT PRIMARY KEY AUTO_INCREMENT,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto),
+    CONSTRAINT chk_cantidad CHECK (cantidad > 0),
+    CONSTRAINT chk_precio_unitario CHECK (precio_unitario >= 0),
+    CONSTRAINT chk_subtotal CHECK (subtotal >= 0)
+);
+
+
+
+-- 12. Tabla Venta
+CREATE TABLE Venta (
+    id_venta INT PRIMARY KEY AUTO_INCREMENT,
+    id_pedido INT NOT NULL UNIQUE,
+    fecha_venta DATETIME DEFAULT CURRENT_TIMESTAMP,
+    monto_total DECIMAL(10,2) NOT NULL,
+    metodo_pago VARCHAR(50) NOT NULL,
+    tipo_venta VARCHAR(10) NOT NULL,
+    id_vendedor INT NULL,
+    FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido),
+    FOREIGN KEY (id_vendedor) REFERENCES Usuario(id_usuario),
+    CONSTRAINT chk_monto_total_venta CHECK (monto_total >= 0),
+    CONSTRAINT chk_tipo_venta CHECK (tipo_venta IN ('Online', 'Presencial'))
+);
+
+-- 13. Tabla Boleta
+CREATE TABLE Boleta (
+    id_boleta INT PRIMARY KEY AUTO_INCREMENT,
+    id_venta INT NOT NULL UNIQUE,
+    serie VARCHAR(4) NOT NULL,
+    correlativo INT NOT NULL,
+    fecha_emision DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_venta) REFERENCES Venta(id_venta) ON DELETE CASCADE
+);
+
+-- 14. Tabla Factura
+CREATE TABLE Factura (
+    id_factura INT PRIMARY KEY AUTO_INCREMENT,
+    id_venta INT NOT NULL UNIQUE,
+    ruc VARCHAR(11) NOT NULL,
+    razon_social VARCHAR(150) NOT NULL,
+    serie VARCHAR(4) NOT NULL,
+    correlativo INT NOT NULL,
+    fecha_emision DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_venta) REFERENCES Venta(id_venta) ON DELETE CASCADE
+);
+
+INSERT INTO CategoriaProducto (nombre_categoria)
+VALUES 
+('Anillos'),
+('Collares'),
+('Pulseras'),
+('Aretes'),
+('Relojes');
+
+INSERT INTO Producto (nombre_producto, descripcion, precio, stock, imagen_url, id_categoria)
+VALUES
+('Anillo Esmeralda Real', 'Anillo de plata con piedra esmeralda natural, diseño elegante y resistente al desgaste.', 250.00, 15, 'https://example.com/img/anillo_esmeralda.jpg', 1),
+('Collar Corazón Dorado', 'Collar bañado en oro de 18k con dije de corazón, ideal para regalos románticos.', 180.00, 20, 'https://example.com/img/collar_corazon.jpg', 2),
+('Pulsera de Perlas Blancas', 'Pulsera de perlas naturales con cierre magnético, elegante y clásica.', 120.00, 30, 'https://example.com/img/pulsera_perlas.jpg', 3),
+('Aretes Luna Plata', 'Aretes de plata con forma de luna creciente, perfectos para uso diario.', 95.00, 40, 'https://example.com/img/aretes_luna.jpg', 4),
+('Reloj Minimalista Acero', 'Reloj de pulsera unisex con correa de acero inoxidable y diseño minimalista.', 320.00, 10, 'https://example.com/img/reloj_acero.jpg', 5);

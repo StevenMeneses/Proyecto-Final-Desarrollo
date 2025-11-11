@@ -1,0 +1,200 @@
+/* Contenedor principal */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  background-color: #f9f9f9;
+}
+
+/* Caja del formulario */
+.register-box {
+  width: 100%;
+  max-width: 900px;
+  padding: 40px;
+  background-color: #fff;
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* Título */
+.register-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #040F2F;
+  margin-bottom: 40px;
+  font-family: 'Irian Serif', serif;
+}
+
+/* Formularios */
+.register-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group-register {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 425px;
+}
+
+.form-group-register label {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.form-group-register input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 24px;
+  outline: none;
+}
+
+.form-group-register input:focus {
+  border-color: #000;
+}
+
+/* Botón */
+.register-btn {
+  grid-column: span 2;
+  padding: 14px;
+  background-color: #000;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #333;
+}
+
+/* Links */
+.form-links {
+  grid-column: span 2;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.form-links a {
+  font-size: 24px;
+  color: #1B2A40;
+  text-decoration: none;
+  font-family: 'Irian Serif', serif;
+  font-style: italic;
+  transition: text-decoration 0.3s ease;
+}
+
+.form-links a:hover {
+  text-decoration: underline;
+}
+
+.input-wrapper-register {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper-register input {
+  width: 100%;
+  padding: 12px;
+  padding-right: 40px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 24px;
+  outline: none;
+}
+
+.toggle-password-register {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #555;
+  cursor: pointer;
+}
+
+.error-wrapper {
+  height: 20px;
+  margin-top: 4px;
+  overflow: hidden;
+  display: block;
+}
+
+.error-message {
+  height: 20px;
+  margin-top: 4px;
+  font-size: 16px;
+  color: red;
+  line-height: 20px;
+  text-align: left;
+  margin: 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .register-form {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .register-btn,
+  .form-links {
+    grid-column: span 1;
+  }
+
+  .register-title {
+    font-size: 28px;
+  }
+
+  .form-group-register input {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .form-group-register label {
+    font-size: 18px;
+  }
+
+  .form-links a {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-title {
+    font-size: 24px;
+  }
+
+  .form-group-register input {
+    font-size: 15px;
+    padding: 8px;
+  }
+
+  .form-group-register label {
+    font-size: 16px;
+  }
+
+  .form-links a {
+    font-size: 15px;
+  }
+
+  .register-btn {
+    font-size: 18px;
+    padding: 10px;
+  }
+}
