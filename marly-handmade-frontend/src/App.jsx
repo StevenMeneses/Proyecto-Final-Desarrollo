@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import ComplaintsBook from "./pages/ComplaintsBook";
 import TermsConditions from "./pages/TermsConditions";
 import SeaCollectionDetail from "./pages/SeaColletionDetail";
+import Shop from "./pages/Shop";
 import RecoverPassword from "./pages/RecoverPassword";
 import Product from "./pages/Product";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
@@ -66,7 +67,7 @@ function App() {
         <Route path="/our-story" element={<OurStory />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/returns" element={<Returns />} />
-        <Route path="/shop" element={<SeaCollectionDetail />} />
+        <Route path="/shop" element={<Shop />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         <Route path="/buy" element={<Buy />} />
 

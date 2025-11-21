@@ -11,6 +11,8 @@ export function FilterProvider({ children }) {
     sortBy: 'best-selling'
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   const updateFilter = (filterType, value) => {
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
@@ -22,10 +24,11 @@ export function FilterProvider({ children }) {
       priceRange: { min: '', max: '' },
       sortBy: 'best-selling'
     });
+    setSearchTerm('');
   };
 
   return (
-    <FilterContext.Provider value={{ filters, updateFilter, clearFilters }}>
+    <FilterContext.Provider value={{ filters, updateFilter, clearFilters, searchTerm, setSearchTerm }}>
       {children}
     </FilterContext.Provider>
   );

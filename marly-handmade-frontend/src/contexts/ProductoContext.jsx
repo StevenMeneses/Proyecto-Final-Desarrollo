@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext"; // Importamos el AuthContext
+import { searchProducts, getAllProducts } from "../services/productoService";
 
 export const ProductoContext = createContext();
 
@@ -137,7 +138,7 @@ export const ProductoProvider = ({ children }) => {
       // Obtener token de admin
       // const token = localStorage.getItem("token");
 
-      if (!token) {
+      if (!token || !token.token) {
         alert("No hay token disponible. No se puede subir el producto.");
         setLoading(false);
         return;
@@ -218,6 +219,48 @@ export const ProductoProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
+  // Función: Buscar productos
+  const buscarProductos = async (searchTerm) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await searchProducts(searchTerm);
+      
+      // Adaptar los datos al formato del frontend
+      const formatted = data.map((item) => ({
+        id: item.id,
+        name: item.nombre,
+        price: item.precio,
+        img: item.fotoPrincipal,
+        stock: item.stock,
+        category: item.categoria,
+        description: item.descripcion,
+        details: item.details,
+        care: item.care,
+        shippingInfo: item.shipping_info,
+        status: item.status,
+        slug: item.nombre
+          .replace(/\s+/g, " ")
+          .trim()
+          .replace(/[^a-zA-Z0-9 ]/g, "")
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(""),
+      }));
+
+      setProductos(formatted);
+      return formatted;
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
   
 
   // Cargar productos al montar el contexto
@@ -237,7 +280,8 @@ export const ProductoProvider = ({ children }) => {
         handleImageUpload,
         handleSubmit,
         getProductoById,
-        product
+        product,
+        buscarProductos
       }}
     >
       {children}

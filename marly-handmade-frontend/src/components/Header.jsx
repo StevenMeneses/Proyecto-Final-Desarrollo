@@ -1,9 +1,11 @@
 import { BrowserRouter } from "react-router-dom";
 import { useState, useContext, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Globe, Search, User, ShoppingCart, Menu, X } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import { useFilters } from "../contexts/FilterContext.jsx";
+import { useProductos } from "../contexts/ProductoContext.jsx";
 import { jwtDecode } from "jwt-decode";
 import { useMemo } from "react";
 
@@ -30,10 +32,16 @@ export default function Header() {
   const [shopOpen, setShopOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const [open, setOpen] = useState(false); // Dropdown del usuario
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [localSearch, setLocalSearch] = useState("");
 
   const menuRef = useRef(null);
+  const searchRef = useRef(null);
   const { openCart } = useCart();
   const { token, logout } = useContext(AuthContext);
+  const { setSearchTerm } = useFilters();
+  const { buscarProductos } = useProductos();
+  const navigate = useNavigate();
 
   // 🔹 Nombre de usuario (Memoizado)
   const userName = useMemo(() => {
@@ -56,10 +64,25 @@ export default function Header() {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (localSearch.trim()) {
+      setSearchTerm(localSearch);
+      // Llamar al backend para buscar productos
+      await buscarProductos(localSearch);
+      navigate('/shop');
+      setSearchOpen(false);
+      setLocalSearch("");
+    }
+  };
 
   // Menú móvil
   const toggleMenu = () => {
@@ -280,7 +303,36 @@ export default function Header() {
             <Globe className="w-5 h-5 text-[#040F2E] pointer-events-none cursor-pointer" />
           </div>
 
-          <Search className="w-5 h-5 cursor-pointer text-[#040F2E]" />
+          {/* Búsqueda */}
+          <div className="relative" ref={searchRef}>
+            <Search 
+              className="w-5 h-5 cursor-pointer text-[#040F2E]" 
+              onClick={() => setSearchOpen(!searchOpen)}
+            />
+            
+            {searchOpen && (
+              <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-5 z-50 border border-gray-100 w-96">
+                <form onSubmit={handleSearch}>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      placeholder="Buscar productos..."
+                      value={localSearch}
+                      onChange={(e) => setLocalSearch(e.target.value)}
+                      className="flex-1 px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#040F2E] text-sm"
+                      autoFocus
+                    />
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 bg-[#040F2E] text-white rounded-md hover:bg-[#1B2A40] transition-colors text-sm font-medium whitespace-nowrap"
+                    >
+                      Buscar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
 
           <select className="rounded px-2 py-1 text-sm hidden sm:block cursor-pointer">
             <option>USD</option>
