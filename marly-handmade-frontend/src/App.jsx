@@ -68,6 +68,7 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/returns" element={<Returns />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/perfil" element={<Profile />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         <Route path="/buy" element={<Buy />} />
 
