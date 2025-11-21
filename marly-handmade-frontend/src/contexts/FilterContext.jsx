@@ -1,4 +1,3 @@
-// contexts/FilterContext.jsx
 import { createContext, useContext, useState } from 'react';
 
 const FilterContext = createContext();
@@ -7,6 +6,7 @@ export function FilterProvider({ children }) {
   const [filters, setFilters] = useState({
     materials: [],
     productTypes: [],
+    categories: [], // NUEVO: filtro por categoría
     priceRange: { min: '', max: '' },
     sortBy: 'best-selling'
   });
@@ -21,6 +21,7 @@ export function FilterProvider({ children }) {
     setFilters({
       materials: [],
       productTypes: [],
+      categories: [], // NUEVO: limpiar categorías también
       priceRange: { min: '', max: '' },
       sortBy: 'best-selling'
     });

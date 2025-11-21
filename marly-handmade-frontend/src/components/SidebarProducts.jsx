@@ -10,13 +10,35 @@ function SidebarProducts() {
     price: false,
     material: false,
     productType: false,
+    category: false,
     sortBy: true,
   });
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const materials = ["Polymer Clay", "Copper Wire", "Resin", "Textile"];
-  const productTypes = ["Bracelets", "Earrings", "Necklaces", "Rings"];
+  // Materiales en español
+  const materiales = ["Arcilla Polimérica", "Alambre de Cobre", "Resina", "Textil", "Madera", "Cerámica"];
+  
+  // Tipos de producto
+  const tiposProducto = ["Pulsera", "Pendiente", "Collar", "Anillo"];
+  
+  // Categorías con múltiples acepciones para evitar errores de tipeo
+  const categorias = [
+    "artesania", 
+    "accesorio", 
+    "decoracion", 
+    "regalo", 
+    "personalizado"
+  ];
+
+  // Mapeo para mostrar nombres bonitos en la UI
+  const categoriaNombres = {
+    "artesania": "Artesanía",
+    "accesorio": "Accesorio",
+    "decoracion": "Decoración", 
+    "regalo": "Regalo",
+    "personalizado": "Personalizado"
+  };
 
   // Sync local state with context 
   useEffect(() => {
@@ -44,6 +66,13 @@ function SidebarProducts() {
     updateFilter("productTypes", newTypes);
   };
 
+  const handleCategoryChange = (category) => {
+    const newCategories = filters.categories.includes(category)
+      ? filters.categories.filter((c) => c !== category)
+      : [...filters.categories, category];
+    updateFilter("categories", newCategories);
+  };
+
   const handlePriceChange = (key, value) => {
     updateFilter("priceRange", { ...filters.priceRange, [key]: value });
   };
@@ -54,9 +83,9 @@ function SidebarProducts() {
 
   return (
     <>
-      {/* Mobile toggle button */}
+      {/* Botón móvil */}
       <div className="md:hidden flex justify-between items-center px-4 py-3 border-b border-gray-200">
-        <span className="text-[#997C71] font-medium text-sm">Filters</span>
+        <span className="text-[#997C71] font-medium text-sm">Filtros</span>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="p-2 rounded-md border border-gray-200"
@@ -73,39 +102,39 @@ function SidebarProducts() {
             : "hidden md:block md:w-72"
         } bg-white px-6 py-10 md:relative flex-shrink-0 transition-all duration-300`}
       >
-        {/* Close button for mobile */}
+        {/* Botón cerrar para móvil */}
         {mobileOpen && (
           <button
             onClick={() => setMobileOpen(false)}
             className="absolute top-4 right-4 text-sm text-[#997C71]"
           >
-            Close ✕
+            Cerrar ✕
           </button>
         )}
 
-        {/* Breadcrumb */}
+        {/* Migas de pan */}
         <nav className="text-xs text-gray-400 mb-12 tracking-wide flex flex-wrap items-center">
           <Link
             to="/"
             className="hover:text-gray-600 cursor-pointer"
             style={{ color: "#997C71" }}
           >
-            Home
+            Inicio
           </Link>
           <span className="mx-2">/</span>
           <span className="uppercase" style={{ color: "#997C71" }}>
-            SEA COLLECTION
+            COLECCIÓN MAR
           </span>
         </nav>
 
-        {/* Price Filter */}
+        {/* Filtro de Precio */}
         <div className="mb-8">
           <button
             onClick={() => toggleSection("price")}
             className="flex items-center justify-between w-full text-left py-2 mb-4"
           >
             <span className="text-base font-light" style={{ color: "#997C71" }}>
-              Price
+              Precio
             </span>
             {openSections.price ? (
               <Minus className="w-4 h-4 stroke-[1.5]" style={{ color: "#997C71" }} />
@@ -119,7 +148,7 @@ function SidebarProducts() {
               <div className="flex items-center gap-3">
                 <div className="flex-1">
                   <label className="block text-xs mb-2" style={{ color: "#997C71" }}>
-                    Min
+                    Mín
                   </label>
                   <input
                     type="number"
@@ -132,7 +161,7 @@ function SidebarProducts() {
                 </div>
                 <div className="flex-1">
                   <label className="block text-xs mb-2" style={{ color: "#997C71" }}>
-                    Max
+                    Máx
                   </label>
                   <input
                     type="number"
@@ -148,7 +177,7 @@ function SidebarProducts() {
           )}
         </div>
 
-        {/* Material Filter */}
+        {/* Filtro de Material */}
         <div className="mb-8">
           <button
             onClick={() => toggleSection("material")}
@@ -166,7 +195,7 @@ function SidebarProducts() {
 
           {openSections.material && (
             <div className="space-y-3 pl-1 mt-5">
-              {materials.map((material) => (
+              {materiales.map((material) => (
                 <label key={material} className="flex items-center cursor-pointer group">
                   <input
                     type="checkbox"
@@ -184,14 +213,14 @@ function SidebarProducts() {
           )}
         </div>
 
-        {/* Product Type Filter */}
+        {/* Filtro de Tipo de Producto */}
         <div className="mb-8">
           <button
             onClick={() => toggleSection("productType")}
             className="flex items-center justify-between w-full text-left py-2 mb-4"
           >
             <span className="text-base font-light" style={{ color: "#997C71" }}>
-              Product type
+              Tipo de Producto
             </span>
             {openSections.productType ? (
               <Minus className="w-4 h-4 stroke-[1.5]" style={{ color: "#997C71" }} />
@@ -202,7 +231,7 @@ function SidebarProducts() {
 
           {openSections.productType && (
             <div className="space-y-3 pl-1 mt-5">
-              {productTypes.map((type) => (
+              {tiposProducto.map((type) => (
                 <label key={type} className="flex items-center cursor-pointer group">
                   <input
                     type="checkbox"
@@ -220,14 +249,50 @@ function SidebarProducts() {
           )}
         </div>
 
-        {/* Sort By */}
+        {/* Filtro de Categoría */}
+        <div className="mb-8">
+          <button
+            onClick={() => toggleSection("category")}
+            className="flex items-center justify-between w-full text-left py-2 mb-4"
+          >
+            <span className="text-base font-light" style={{ color: "#997C71" }}>
+              Categoría
+            </span>
+            {openSections.category ? (
+              <Minus className="w-4 h-4 stroke-[1.5]" style={{ color: "#997C71" }} />
+            ) : (
+              <Plus className="w-4 h-4 stroke-[1.5]" style={{ color: "#997C71" }} />
+            )}
+          </button>
+
+          {openSections.category && (
+            <div className="space-y-3 pl-1 mt-5">
+              {categorias.map((category) => (
+                <label key={category} className="flex items-center cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={filters.categories.includes(category)}
+                    onChange={() => handleCategoryChange(category)}
+                    className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                    style={{ accentColor: "#997C71" }}
+                  />
+                  <span className="ml-3 text-sm font-light" style={{ color: "#997C71" }}>
+                    {categoriaNombres[category]}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Ordenar por */}
         <div className="mb-8">
           <button
             onClick={() => toggleSection("sortBy")}
             className="flex items-center justify-between w-full text-left py-2 mb-4"
           >
             <span className="text-base font-light" style={{ color: "#997C71" }}>
-              Sort by
+              Ordenar por
             </span>
             {openSections.sortBy ? (
               <Minus className="w-4 h-4 stroke-[1.5]" style={{ color: "#997C71" }} />
@@ -239,9 +304,9 @@ function SidebarProducts() {
           {openSections.sortBy && (
             <div className="space-y-4 pl-1 mt-5">
               {[
-                { value: "best-selling", label: "Best selling" },
-                { value: "price-low-high", label: "Price, low to high" },
-                { value: "price-high-low", label: "Price, high to low" },
+                { value: "best-selling", label: "Más vendidos" },
+                { value: "price-low-high", label: "Precio: menor a mayor" },
+                { value: "price-high-low", label: "Precio: mayor a menor" },
               ].map((option) => (
                 <label key={option.value} className="flex items-center cursor-pointer group">
                   <div className="relative">
@@ -274,12 +339,12 @@ function SidebarProducts() {
           )}
         </div>
 
-        {/* Clear Filters */}
+        {/* Limpiar filtros */}
         <button
           onClick={clearFilters}
           className="mt-4 text-sm underline text-[#997C71]"
         >
-          Clear all filters
+          Limpiar todos los filtros
         </button>
       </aside>
     </>
