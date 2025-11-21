@@ -64,6 +64,12 @@ public class ProductoService {
 
     }
 
+    public List<ProductoResponse> buscarPorTermino(String searchTerm) {
+
+        return productoRepository.buscarPorTermino(searchTerm).stream().map(ProductoResponse::new).toList();
+
+    }
+
     public ProductoResponse buscar(String nombre, Long id) {
 
         if (id != null)

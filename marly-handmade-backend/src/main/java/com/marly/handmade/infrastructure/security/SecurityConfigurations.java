@@ -37,7 +37,7 @@ public class SecurityConfigurations {
                                )
                         .permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/producto/all", "/promociones/{nombre}",
+                        .requestMatchers(HttpMethod.GET, "/producto/all", "/producto/search", "/promociones/{nombre}",
                                 "/promociones/mostrar/{id}", "/promociones", "/usuario/all", "/clientes/all")
                         .permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/auth/update-password")

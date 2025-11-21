@@ -67,6 +67,16 @@ public class ProductoController {
 
     }
 
+    @GetMapping("search")
+
+    public ResponseEntity<List<ProductoResponse>> buscarProductos(@RequestParam String q) {
+
+        log.info("Buscando productos con término: {}", q);
+
+        return ResponseEntity.ok(productoService.buscarPorTermino(q));
+
+    }
+
     @GetMapping
 
     public ResponseEntity<ProductoResponse> buscar(@RequestParam(required = false) Long id,
