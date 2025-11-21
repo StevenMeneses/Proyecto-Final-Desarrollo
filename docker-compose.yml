@@ -18,6 +18,8 @@ services:
       - "8080:8080"
     networks:
       - app-networks
+    env_file:
+      - .env
     environment:
       - URL_BD=${URL_BD}
       - USER_BD=${USER_BD}
