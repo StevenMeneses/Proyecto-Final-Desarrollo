@@ -8,7 +8,31 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda&family=Cormorant+Garamond&family=Libre+Baskerville&family=Playfair+Display&family=Yeseva+One&display=swap" rel="stylesheet">
-
+    
+    <!-- SCRIPT PARA REDIRIGIR URLs SIN # A CON # -->
+    <script>
+      // Solo ejecuta si estamos en producción (Render)
+      if (window.location.hostname.includes('onrender.com')) {
+        const path = window.location.pathname;
+        const search = window.location.search;
+        
+        // Si NO tiene # y NO es la raíz, redirige a con #
+        if (!window.location.hash && path !== '/' && path !== '/index.html') {
+          // Preserva los parámetros de búsqueda (?query=...)
+          const redirectUrl = '/#' + path + search;
+          window.location.replace(redirectUrl);
+        }
+        
+        // Si tiene # pero está mal formado (ej: #terms en vez de #/terms), corrige
+        if (window.location.hash && !window.location.hash.startsWith('#/')) {
+          const fixedHash = window.location.hash.startsWith('#') 
+            ? '#/' + window.location.hash.substring(1)
+            : '#/' + window.location.hash;
+          window.history.replaceState(null, '', fixedHash + search);
+        }
+      }
+    </script>
+    
   </head>
   <body>
     <div id="root"></div>
