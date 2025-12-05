@@ -44,7 +44,7 @@ function Inventory() {
     if (!window.confirm(`¿Estás seguro de eliminar el producto "${productName}"?`)) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/producto/${productId}`, {
+      const response = await fetch(`https://proyecto-final-desarrollo.onrender.com/producto/${productId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token.token}`,

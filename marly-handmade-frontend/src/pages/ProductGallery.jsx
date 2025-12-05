@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../styles/ProductGallery.css";
 
 const getProductsData = async () => {
-  const response = await fetch("http://localhost:8080/producto/all");
+  const response = await fetch("https://proyecto-final-desarrollo.onrender.com/producto/all");
   if (!response.ok) throw new Error("Error al obtener productos");
   return await response.json();
 };

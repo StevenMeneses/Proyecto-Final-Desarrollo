@@ -2,7 +2,7 @@ import { useState, useEffect, createContext } from "react";
 import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
-const API_URL = "http://localhost:8080/auth/";
+const API_URL = "https://proyecto-final-desarrollo.onrender.com/auth/";
 
 export function AuthProviderWrapper({ children }) {
   const [token, setToken] = useState(() => {

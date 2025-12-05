@@ -15,7 +15,7 @@ export const AdminProvider = ({ children }) => {
 
 
   try {
-    const response = await fetch("http://localhost:8080/clientes/all");
+    const response = await fetch("https://proyecto-final-desarrollo.onrender.com/clientes/all");
 
     if (!response.ok) {
       console.error("❌ Response no OK:", response.status, response.statusText);

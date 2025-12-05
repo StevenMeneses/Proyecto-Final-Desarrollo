@@ -27,7 +27,7 @@ export const ProductoProvider = ({ children }) => {
     shippingInfo: "",
   });
 
-  const API_URL = "http://localhost:8080/producto";
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/producto";
 
   // Función: Listar productos
   const listarProductos = async () => {
@@ -164,7 +164,7 @@ export const ProductoProvider = ({ children }) => {
       console.log("📦 Token a enviar:", token.token);
 
       // Enviar POST al backend
-      const response = await fetch("http://localhost:8080/producto", {
+      const response = await fetch("https://proyecto-final-desarrollo.onrender.com/producto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

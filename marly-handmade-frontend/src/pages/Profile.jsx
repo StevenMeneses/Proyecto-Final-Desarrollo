@@ -43,7 +43,7 @@ function Profile() {
         return;
       }
       
-      const response = await fetch("http://localhost:8080/clientes/perfil", {
+      const response = await fetch("https://proyecto-final-desarrollo.onrender.com/clientes/perfil", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token.token}`,

@@ -51,7 +51,7 @@ const Buy = () => {
     // Enviar los pedidos uno por uno
     for (let pedidoBody of pedidos) {
       try {
-        const res = await fetch("http://localhost:8080/pedido", {
+        const res = await fetch("https://proyecto-final-desarrollo.onrender.com/pedido", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

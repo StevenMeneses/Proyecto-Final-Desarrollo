@@ -35,7 +35,7 @@ export default function Product() {
   const { openCart, addToCart } = useCart();
   const { token, logout } = useContext(AuthContext);
 
-  const API_URL = "http://localhost:8080/producto/all";
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/producto/all";
 
   useEffect(() => {
     const fetchProducto = async () => {

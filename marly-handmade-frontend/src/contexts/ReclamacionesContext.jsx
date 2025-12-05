@@ -12,7 +12,7 @@ export const ReclamacionesProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://localhost:8080/reclamaciones"; // tu API Spring Boot
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/reclamaciones"; // tu API Spring Boot
 
   // Crear una nueva reclamación
   const crearReclamacion = async (data) => {

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/producto";
+const API_URL = "https://proyecto-final-desarrollo.onrender.com/producto";
 
 export const searchProducts = async (searchTerm) => {
   try {

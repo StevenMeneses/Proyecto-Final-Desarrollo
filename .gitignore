@@ -67,3 +67,5 @@ $RECYCLE.BIN/
 
 # Linux
 *~
+.vercel
+.env*.local

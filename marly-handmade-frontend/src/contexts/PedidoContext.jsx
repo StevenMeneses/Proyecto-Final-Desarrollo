@@ -7,7 +7,7 @@ export function PedidoProviderWrapper({ children }) {
   const { token } = useContext(AuthContext);
   const [pedidos, setPedidos] = useState([]);
 
-  const API_URL = "http://localhost:8080/pedido";
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/pedido";
 
   const reportes = async () => {
     try {

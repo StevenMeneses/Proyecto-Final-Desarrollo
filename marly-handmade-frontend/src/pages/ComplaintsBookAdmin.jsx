@@ -6,7 +6,7 @@ const ComplaintsBookAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://localhost:8080/reclamaciones";
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/reclamaciones";
 
   useEffect(() => {
     const fetchReclamaciones = async () => {

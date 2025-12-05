@@ -6,7 +6,7 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "http://localhost:8080/pedido";
+  const API_URL = "https://proyecto-final-desarrollo.onrender.com/pedido";
 
   useEffect(() => {
     const fetchPedidos = async () => {
