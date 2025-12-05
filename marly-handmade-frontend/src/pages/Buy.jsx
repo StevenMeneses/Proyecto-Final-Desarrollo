@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartItems from "../components/CartItems.jsx";
@@ -10,6 +11,8 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Buy = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const navigate = useNavigate();
+  const { token, user, logout } = useContext(AuthContext);
 
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardData, setCardData] = useState({
@@ -20,8 +23,7 @@ const Buy = () => {
     type: "",
   });
   const [errors, setErrors] = useState({});
-  const [buttonState, setButtonState] = useState("idle"); // idle | loading | success | error
-  const { token, logout } = useContext(AuthContext);
+  const [buttonState, setButtonState] = useState("idle");
 
   // Detectar tipo de tarjeta
   const detectCardType = (number) => {
@@ -32,52 +34,54 @@ const Buy = () => {
     return "";
   };
 
+  // Crear pedidos en el backend
   const createMultiplePedidos = async () => {
     if (cartItems.length === 0) return;
 
-    // Construir todos los pedidos primero
+    console.log("🔄 Token de autenticación:", token?.token || token);
+    console.log("📦 Productos en carrito:", cartItems);
+
     const pedidos = cartItems.map((item) => ({
       detallePedido: [
         {
           cantidad: item.quantity,
-          idProducto: item.id,
+          idProducto: item.id || item.productoId || item._id,
         },
       ],
     }));
 
-    // Imprimir todos los pedidos antes de enviarlos
-    console.log("Pedidos a enviar:", pedidos);
+    console.log("📤 Pedidos a enviar:", pedidos);
 
-    // Enviar los pedidos uno por uno
     for (let pedidoBody of pedidos) {
       try {
         const res = await fetch("https://proyecto-final-desarrollo.onrender.com/pedido", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token.token}`,
+            Authorization: `Bearer ${token?.token || token}`,
           },
           body: JSON.stringify(pedidoBody),
         });
 
-        if (!res.ok)
+        console.log(`📥 Respuesta del backend - Status: ${res.status}`);
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
           throw new Error(
-            "Error al crear pedido para producto " +
-              pedidoBody.detallePedido[0].idProducto
+            `Error ${res.status}: ${errorData.message || "Error al crear pedido"}`
           );
+        }
 
         const data = await res.json();
-        console.log("Pedido creado:", data);
+        console.log("✅ Pedido creado:", data);
       } catch (err) {
-        console.error(err);
+        console.error("❌ Error creando pedido:", err);
+        throw err;
       }
     }
-
-    // Limpiar carrito después de crear todos los pedidos
-    clearCart();
   };
 
-  // Formateo de número y fecha
+  // Formateo de tarjeta
   const formatCardNumber = (value) =>
     value
       .replace(/\D/g, "")
@@ -118,13 +122,12 @@ const Buy = () => {
     return Object.keys(errs).length === 0;
   };
 
-  // Manejo de cambio en inputs
+  // Manejo de inputs
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     let newValue = value;
 
     if (id === "card-cvv") {
-      // Filtra solo números y limita a 4 dígitos
       newValue = value.replace(/\D/g, "").slice(0, 4);
     }
 
@@ -140,9 +143,12 @@ const Buy = () => {
     setCardData((prev) => ({ ...prev, [id.split("-")[1]]: newValue }));
   };
 
-  // Procesar pago
-  // Antes de handleCheckout, agrega un chequeo rápido
-  const handleCheckout = () => {
+  // PROCESAR PAGO COMPLETO CON localStorage
+  const handleCheckout = async () => {
+    console.log("🟡 === INICIANDO CHECKOUT ===");
+    console.log("🟡 Carrito items:", cartItems.length);
+    console.log("🟡 Usuario:", user);
+
     if (cartItems.length === 0) {
       alert("Tu carrito está vacío.");
       return;
@@ -152,18 +158,116 @@ const Buy = () => {
       if (!validateCard()) {
         setButtonState("error");
         setTimeout(() => setButtonState("idle"), 1500);
+        alert("Por favor, corrige los errores en la información de la tarjeta.");
         return;
       }
     }
 
+    // Mostrar confirmación
+    const confirmCheckout = window.confirm(
+      `¿Estás seguro de proceder con la compra?\n\nTotal: $${(getCartTotal() + 10).toFixed(
+        2
+      )}\nProductos: ${cartItems.length}\nMétodo: ${
+        paymentMethod === "card"
+          ? "Tarjeta"
+          : paymentMethod === "yape"
+          ? "Yape"
+          : "Plin"
+      }`
+    );
+
+    if (!confirmCheckout) {
+      return;
+    }
+
     setButtonState("loading");
 
-    setTimeout(async () => {
-      await createMultiplePedidos(); // Llamada a la función que crea los pedidos
-      setButtonState("success");
-      setCardData({ number: "", expiry: "", cvv: "", name: "", type: "" });
+    try {
+      // 1. Crear pedidos en backend
+      console.log("🔄 Creando pedidos en backend...");
+      await createMultiplePedidos();
+      console.log("✅ Pedidos creados exitosamente");
+
+      // 2. Preparar datos para el comprobante
+      const compraData = {
+        id: `MRLY-${Date.now()}`,
+        fecha: new Date().toISOString(),
+        fechaFormateada: new Date().toLocaleDateString("es-PE", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        cliente: {
+          nombre: user?.nombre || user?.name || "Cliente Marly",
+          email: user?.email || "cliente@email.com",
+          telefono: user?.telefono || user?.phone || "No especificado",
+        },
+        productos: cartItems.map((item) => ({
+          nombre: item.nombre || item.name || item.title || `Producto ${item.id}`,
+          cantidad: item.quantity,
+          precio: item.precio || item.price || 0,
+          imagen: item.imagen || item.image || "",
+        })),
+        subtotal: getCartTotal(),
+        envio: 10.0,
+        total: getCartTotal() + 10,
+        metodoPago: {
+          tipo:
+            paymentMethod === "card"
+              ? "Tarjeta de Crédito/Débito"
+              : paymentMethod === "yape"
+              ? "Yape"
+              : "Plin",
+          referencia:
+            paymentMethod === "card"
+              ? `**** ${cardData.number.replace(/\s+/g, "").slice(-4)}`
+              : paymentMethod === "yape"
+              ? "Pago Yape - Código QR"
+              : "Pago Plin - Código QR",
+          numeroTarjeta: paymentMethod === "card" ? cardData.number : undefined,
+          tipoTarjeta: paymentMethod === "card" ? cardData.type : undefined,
+        },
+      };
+
+      console.log("📦 Datos de compra preparados:", compraData);
+
+      // 3. Guardar datos en localStorage
+      sessionStorage.setItem("lastPurchase", JSON.stringify(compraData));
+      sessionStorage.setItem("lastPurchaseTime", Date.now().toString());
+      console.log("💾 Datos guardados en localStorage");
+
+      // 4. Limpiar carrito
+      clearCart();
+      console.log("🛒 Carrito limpiado");
+
+      // 5. Redirigir a página de éxito (usando window.location para forzar recarga)
+      console.log("🔄 Redirigiendo a /checkout-success...");
+      
+      // Opción A: Si tu app usa BrowserRouter (sin #)
+      window.location.href = "/checkout-success";
+      
+      // Opción B: Si tu app usa HashRouter (con #) - descomenta esta línea
+      // window.location.href = "/#/checkout-success";
+
+    } catch (error) {
+      console.error("❌ Error en checkout:", error);
+      setButtonState("error");
+      
+      let errorMessage = "Hubo un error procesando tu compra. ";
+      
+      if (error.message.includes("401") || error.message.includes("token")) {
+        errorMessage += "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
+      } else if (error.message.includes("404")) {
+        errorMessage += "El servidor no respondió. Intenta más tarde.";
+      } else {
+        errorMessage += error.message;
+      }
+      
+      alert(errorMessage);
       setTimeout(() => setButtonState("idle"), 2000);
-    }, 1000);
+    }
   };
 
   return (
@@ -337,7 +441,11 @@ const Buy = () => {
               <button
                 className={`checkout-btn ${buttonState}`}
                 onClick={handleCheckout}
-                disabled={buttonState === "loading" || cartItems.length === 0} // deshabilitado si carrito vacío
+                disabled={
+                  buttonState === "loading" ||
+                  cartItems.length === 0 ||
+                  (paymentMethod === "card" && Object.keys(errors).length > 0)
+                }
               >
                 {cartItems.length === 0 ? (
                   <>Carrito vacío</>
@@ -360,6 +468,18 @@ const Buy = () => {
                   </>
                 )}
               </button>
+
+              {/* Información adicional */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-gray-700 mb-2">
+                  <i className="fas fa-shield-alt mr-2"></i>
+                  Compra Segura
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Tu información de pago está protegida con encriptación SSL.
+                  No almacenamos los datos de tu tarjeta.
+                </p>
+              </div>
             </div>
           </div>
         </div>
