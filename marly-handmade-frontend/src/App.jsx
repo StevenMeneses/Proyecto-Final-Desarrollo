@@ -22,7 +22,6 @@ import FAQ from "./pages/FAQ.jsx";
 import OurStory from "./pages/OurStory.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import Returns from "./pages/Returns.jsx";
-
 import ConfirmNewPassword from "./pages/ConfirmNewPassword";
 import Dashboard from "./pages/AdminDashboard";
 import Profile from "./pages/Profile";
@@ -35,6 +34,7 @@ import UserManagement from "./pages/UserManagement";
 import ProductRegister from "./pages/ProductRegister";
 import Buy from "./pages/Buy.jsx";
 import ComplaintsBookAdmin from "./pages/ComplaintsBookAdmin.jsx";
+import CheckoutSuccess from "./pages/CheckoutSuccess"; // ✅ NUEVO IMPORT
 
 import { FilterProvider } from "./contexts/FilterContext.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
@@ -71,6 +71,7 @@ function App() {
         <Route path="/perfil" element={<Profile />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         <Route path="/buy" element={<Buy />} />
+        <Route path="/checkout-success" element={<CheckoutSuccess />} /> {/* ✅ NUEVA RUTA */}
         
 
         {/* ADMIN */}
@@ -85,7 +86,7 @@ function App() {
         <Route path="complaints" element={<ComplaintsBookAdmin/>} />
         <Route path="profile" element={<Profile />} />
         <Route path="product-gallery" element={<ProductGallery />} />
-        <Route path="inventory/edit/:id" element={<ProductUpload />} />
+        <Route path="inventory/edit/:id" element={<ProductUpload />} />
         </Route>
       </Routes>
       </FilterProvider> 
