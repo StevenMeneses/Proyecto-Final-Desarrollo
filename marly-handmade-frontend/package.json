@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
+    "postbuild": "node render-spa.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "render:deploy": "npm run build"
   },
   "dependencies": {
     "aos": "^2.3.4",
