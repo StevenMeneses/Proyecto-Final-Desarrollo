@@ -71,6 +71,7 @@ function App() {
         <Route path="/perfil" element={<Profile />} />
         <Route path="/confirm-new-password/:token" element={<ConfirmNewPassword />} />
         <Route path="/buy" element={<Buy />} />
+        
 
         {/* ADMIN */}
         <Route path="/admin" element={<AdminLayout />}>

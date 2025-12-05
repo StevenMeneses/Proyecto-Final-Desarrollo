@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: './',  // ← CAMBIADO: '/' por './' para HashRouter
+  base: '/',  // ← CAMBIA './' por '/' para BrowserRouter
 })
